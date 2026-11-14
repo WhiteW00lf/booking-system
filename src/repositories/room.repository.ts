@@ -1,7 +1,7 @@
 import {rooms} from '../db/schema.ts';
 import db from '../index.ts'
 
-type NewRoom = typeof rooms.$inferInsert;
+export type NewRoom = typeof rooms.$inferInsert;
 
 async function getAllRooms() {
 
