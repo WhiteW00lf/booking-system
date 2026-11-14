@@ -1,6 +1,7 @@
 import {rooms} from '../db/schema.ts';
 import db from '../index.ts'
 
+type NewRoom = typeof rooms.$inferInsert;
 
 async function getAllRooms() {
 
@@ -11,6 +12,13 @@ async function getAllRooms() {
 
 }
 
+async function insertRoom(newRoom: NewRoom) {
 
-export { getAllRooms }
+    const insertedRoom = await db.insert(rooms).values(newRoom).returning();
+    
+    return insertedRoom[0];
+}
+
+
+export { getAllRooms, insertRoom }
 
