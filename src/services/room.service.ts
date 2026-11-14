@@ -16,9 +16,12 @@ async function addRoom(Room: NewRoom){
         throw new Error('Room floor must be a positive number');
     }
 
-    Room.name = Room.name.trim();
-
-    const insertedRoom = await insertRoom(Room);
+    const cleanedRoom = {
+        name: Room.name.trim(),
+        capacity: Room.capacity,
+        floor: Room.floor
+    };
+    const insertedRoom = await insertRoom(cleanedRoom);
     return insertedRoom;
     
 
