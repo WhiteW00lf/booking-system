@@ -3,13 +3,14 @@ import registerUser from '../services/user.service';
 
 
 
-async function register(req: Request, res: Response) {
+export async function Login(req: Request, res: Response) {
 
-        const user = await registerUser(req.body);
+    const userData = req.body;
+        const user = await registerUser(userData);
         res.status(201).json({name: user.name, 
             email: user.email, createdAt: user.createdAt});
 
 
 }
 
-export default register;
+
