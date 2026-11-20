@@ -1,4 +1,4 @@
-import { createUser, type UserData } from '../repositories/user.repository';
+import {createUser, findUserByEmail, type UserData} from '../repositories/user.repository';
 import bcrypt from 'bcrypt';
 import AppError from "../errors/AppError.ts";
 
@@ -49,5 +49,35 @@ async function registerUser(data: RegistrationInput) {
     }
 }
 
+
+export async function LoginUser(email : string,password: string) {
+    if(typeof email != 'string' || email.trim().length <= 5  ) {
+        throw new AppError('Please enter a valid email', 400);
+    }
+
+    email = email.trim().toLowerCase();
+
+    if(typeof password != 'string' || password === '' ) {
+        throw new AppError('Please enter a valid password', 400);
+    }
+    const userFound = await findUserByEmail(email);
+    if(userFound != undefined){
+         const status = await bcrypt.compare(password, userFound.passwordHash);
+         if(status) {
+             return {
+                 id: userFound.id,
+                 email: userFound.email,
+                 name: userFound.name,
+             }
+         }else{
+             throw new AppError("User and password combination does not match", 401);
+         }
+
+
+    }else{
+        throw  new AppError("User and password combination does not match", 401);
+    }
+
+}
 
 export default registerUser;
