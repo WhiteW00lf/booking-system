@@ -38,3 +38,11 @@ export const bookings = pgTable("bookings", {
     check("status_valid", sql`${table.status} IN ('confirmed', 'cancelled')`)
 ]
 );
+
+export const sessions = pgTable("sessions", {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid().notNull().references(() => users.id, { onDelete: 'cascade' }),
+    token_hash: text('token_hash').notNull().unique(),
+    created_at: timestamp('created_at', {withTimezone: true}).notNull().defaultNow(),
+    expires_at: timestamp('expires_at', {withTimezone: true}).notNull()
+});
